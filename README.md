@@ -1,0 +1,2 @@
+docker-compose.yaml使用的阿里云私有仓库，php镜像内置了redis以及mysql扩展，vim命令，整套环境可以直接使用，由于宿主机端口占用，改用了81，3307等端口
+docker-compose2.yaml是带dockerfile版本，可以从开源镜像安装环境
