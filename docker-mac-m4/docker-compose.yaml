@@ -1,0 +1,65 @@
+services:
+  nginx:
+    image: nginx:1.20.0
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/conf:/etc/nginx/conf.d
+      - ./www:/usr/share/nginx/html
+  php:
+    build:
+      context: ./
+      dockerfile: php.dockerfile
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./www:/www
+  database:
+    image: mysql:8.1.0
+    ports:
+      - "3306:3306"
+    environment:
+      - "MYSQL_ROOT_PASSWORD=root"
+      - "MYSQL_DATABASE=larabbs"
+      - "MYSQL_USER=homestead"
+      - "MYSQL_PASSWORD=secret"
+  redis:
+    image: redis:7
+    ports:
+      - 6379:6379
+  mongo:
+    image: mongo:6.0.4-jammy
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: Aa123456_
+    volumes:
+      - ./mongo/db:/data/db
+    ports:
+      - 27017:27017
+    networks:
+      network:
+        ipv4_address: 172.8.0.15
+  rabbitmq:
+    image: rabbitmq:3.11.10-management
+    restart: always
+    environment:
+      RABBITMQ_DEFAULT_USER: root
+      RABBITMQ_DEFAULT_PASS: Aa123456_
+    volumes:
+      - ./rabbitmq/:/var/lib/rabbitmq
+      - ./rabbitmq/:/var/log/rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    #networks:
+     # network:
+      #  ipv4_address: 172.8.0.17
+networks:
+  network:
+    ipam:
+      driver: default
+      config:
+        - subnet: '172.8.0.0/17'
+
+      
